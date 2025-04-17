@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "root"; // Asenda oma andmebaasi kasutajanimega
-$password = ""; // Asenda oma andmebaasi parooliga
+$username = "kasutaja"; // Asenda oma andmebaasi kasutajanimega
+$password = "Gd7HhvSX7HUEBCEkjFDy"; // Asenda oma andmebaasi parooliga
 $dbname = "kasutajad";
 
 // Loome ühenduse

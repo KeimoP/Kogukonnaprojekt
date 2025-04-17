@@ -1,6 +1,6 @@
 <?php
 session_start();
-# require 'db_connect.php';
+require 'db_connect.php';
 
 // Kui kasutaja on juba küsimuste lehel, suuna sinna
 if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
