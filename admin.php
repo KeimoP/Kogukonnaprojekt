@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
     }
 }
 
-if (!isset($_SESSION['admin_authenticated']) {
+if (!isset($_SESSION['admin_authenticated'])) {
     ?>
     <!DOCTYPE html>
     <html lang="et">

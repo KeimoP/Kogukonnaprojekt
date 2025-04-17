@@ -1,0 +1,34 @@
+{
+    "questions": [
+      {
+        "id": 1,
+        "et": "Mis sa täna sõid?",
+        "en": "What did you eat today?",
+        "ru": "Что ты сегодня ел?"
+      },
+      {
+        "id": 2,
+        "et": "Kas sa jooid täna piisavalt vett?",
+        "en": "Did you drink enough water today?",
+        "ru": "Ты пил сегодня достаточно воды?"
+      },
+      {
+        "id": 3,
+        "et": "Kas tegin täna midagi, mis sind rõõmustas?",
+        "en": "Did you do anything today that made you happy?",
+        "ru": "Ты сделал сегодня что-нибудь, что порадовало тебя?"
+      },
+      {
+        "id": 4,
+        "et": "Kas läksid täna õue?",
+        "en": "Did you go outside today?",
+        "ru": "Ты выходил сегодня на улицу?"
+      },
+      {
+        "id": 5,
+        "et": "Millist muusikat sa täna kuulasid?",
+        "en": "What music did you listen to today?",
+        "ru": "Какую музыку ты слушал сегодня?"
+      }
+    ]
+  }

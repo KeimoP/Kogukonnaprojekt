@@ -1,0 +1,13 @@
+{
+    "welcome_title": "Tervitus",
+    "welcome_heading": "Tere tulemast",
+    "name_prompt": "Palun sisesta oma nimi",
+    "name_placeholder": "Sinu nimi...",
+    "continue_button": "Jätka",
+    "privacy_notice": "Sinu vastuseid ei salvestata. Need on ainult sinu jaoks.",
+    "questions_title": "Päevaküsimused",
+    "questions_heading": "Väikesed küsimused sinu päeva kohta",
+    "answer_placeholder": "Kirjuta siia oma vastus...",
+    "submit_button": "Saada vastused",
+    "thank_you_message": "Aitäh, et võtsid aega enda jaoks! ❤️"
+}
