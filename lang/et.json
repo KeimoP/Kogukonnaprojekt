@@ -4,10 +4,21 @@
     "name_prompt": "Palun sisesta oma nimi",
     "name_placeholder": "Sinu nimi...",
     "continue_button": "Jätka",
+    "returning_user": "Ma olen juba siin leheküljel käinud",
     "privacy_notice": "Sinu vastuseid ei salvestata. Need on ainult sinu jaoks.",
     "questions_title": "Päevaküsimused",
     "questions_heading": "Väikesed küsimused sinu päeva kohta",
     "answer_placeholder": "Kirjuta siia oma vastus...",
     "submit_button": "Saada vastused",
-    "thank_you_message": "Aitäh, et võtsid aega enda jaoks! ❤️"
+    "thank_you_message": "Aitäh, et võtsid aega enda jaoks! ❤️",
+    "export_button": "Salvesta PDF-na",
+    "export_title": "Sinu vastused",
+    "name_label": "Nimi",
+    "date_label": "Kuupäev",
+    "question_label": "Küsimus",
+    "answer_label": "Vastus",
+    "export_filename": "minu_vastused",
+    "no_answer": "Vastus puudub",
+    "no_answers_alert": "Palun vasta esmalt mõnele küsimusele!",
+    "new_questions_button": "Uued küsimused"
 }

@@ -1,6 +1,33 @@
 <?php
 session_start();
 
+// Only track if this is a NEW session
+if (empty($_SESSION['visitor_tracked'])) {
+    try {
+        require 'db_connect.php';
+        
+        $name = $_POST['name'] ?? null;
+        $is_returning = isset($_POST['returning_user']) ? 1 : 0;
+        
+        $stmt = $conn->prepare("INSERT INTO visitors (name, is_returning, visit_time) VALUES (?, ?, NOW())");
+        $stmt->bind_param("si", $name, $is_returning);
+        
+        if ($stmt->execute()) {
+            $_SESSION['visitor_tracked'] = true; // Mark as tracked
+            $_SESSION['visitor_id'] = $stmt->insert_id; // Store ID if needed
+        }
+        $stmt->close();
+    } catch (Exception $e) {
+        error_log("Tracking error: ".$e->getMessage());
+    }
+}
+
+// Your existing redirect logic...
+if (isset($_SESSION['authenticated'])) {
+    header('Location: questions.php');
+    exit;
+}
+
 // Language selection
 $available_langs = ['et' => 'Eesti', 'en' => 'English', 'ru' => 'Русский'];
 $lang = $_GET['lang'] ?? 'et';
@@ -43,6 +70,9 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
             background-color: #d63384;
             color: white !important;
         }
+        .btn {
+            text-decoration: none;
+        }
     </style>
 </head>
 <body class="flower-bg">
@@ -65,6 +95,14 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
                 </div>
                 <button type="submit" class="btn btn-pink w-100"><?= $translations['continue_button'] ?></button>
             </form>
+            <div class="mt-3 text-center">
+                <form method="POST">
+                    <input type="hidden" name="returning_user" value="1">
+                    <button type="submit" class="btn btn-link text-pink">
+                        <span class="flower-emoji">🌼</span> <?= $translations['returning_user'] ?>
+                    </button>
+                </form>
+            </div>
             
             <div class="mt-3 p-3 bg-light-pink rounded text-center small">
                 <?= $translations['privacy_notice'] ?>
