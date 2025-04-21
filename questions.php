@@ -40,64 +40,168 @@ if (isset($_SESSION['user_name'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
-        .flower-bg {
-            background-color: #fff5f7;
-            background-image: url('assets/images/lill1.jpeg'), url('assets/images/lill2.svg');
-            background-position: left top, right bottom;
-            background-repeat: no-repeat;
-            background-size: 200px, 150px;
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --text-color: #2b2d42;
+        }
+        
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+        
+        .questions-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+        
         .questions-card {
-            border-radius: 15px;
-            background-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 30px rgba(255, 182, 193, 0.3);
-            border: 1px solid #ffccd5;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            border: none;
         }
-        .question-card {
-            background-color: rgba(255, 255, 255, 0.7);
-            border-left: 4px solid #d63384;
+        
+        .questions-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .questions-header h1 {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .questions-header .icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
             margin-bottom: 1rem;
         }
+        
+        .question-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-control {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+            margin-top: 0.5rem;
+        }
+        
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+        
         .btn-export {
             background-color: #6f42c1;
             color: white;
-            margin-left: 10px;
+            margin-left: 1rem;
         }
+        
         .btn-export:hover {
             background-color: #5a32a3;
             color: white;
+            transform: translateY(-2px);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        @media (max-width: 576px) {
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-export {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
         }
     </style>
 </head>
-<body class="flower-bg">
-    <div class="container py-5">
-        <div class="questions-card p-4">
-            <h1 class="text-center mb-4 text-pink"><?= $translations['questions_heading'] ?> <span class="flower-emoji">🌼</span></h1>
+<body>
+    <div class="questions-container">
+        <div class="questions-card">
+            <div class="questions-header">
+                <div class="icon">📝</div>
+                <h1><?= $translations['questions_heading'] ?></h1>
+            </div>
             
             <form id="questions-form">
                 <?php foreach ($selected_questions as $index => $question): ?>
-                    <div class="question-card p-3 mb-3">
-                        <label class="form-label text-pink"><?= ($index+1) ?>. <?= $question[$_SESSION['lang']] ?></label>
+                    <div class="question-card">
+                        <label class="form-label fw-bold"><?= ($index+1) ?>. <?= $question[$_SESSION['lang']] ?></label>
                         <textarea class="form-control" name="answer[<?= $question['id'] ?>]" 
                                   rows="3" placeholder="<?= $translations['answer_placeholder'] ?>"></textarea>
                     </div>
                 <?php endforeach; ?>
                 
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-pink btn-lg"><?= $translations['submit_button'] ?></button>
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-primary btn-lg"><?= $translations['submit_button'] ?></button>
                     <button type="button" id="export-pdf" class="btn btn-export btn-lg">
                         <i class="bi bi-file-earmark-pdf"></i> <?= $translations['export_button'] ?>
                     </button>
                 </div>
+                
                 <div class="text-center mt-4">
-                <form method="POST">
-                    <button type="submit" name="new_questions" class="btn btn-secondary btn-lg">
-                        <?= $translations['new_questions_button'] ?>
-                        <span class="flower-emoji">🌼</span>
-                    </button>
-                </form>
-            </div>
+                    <form method="POST">
+                        <button type="submit" name="new_questions" class="btn btn-secondary btn-lg">
+                            <?= $translations['new_questions_button'] ?>
+                        </button>
+                    </form>
+                </div>
             </form>
         </div>
     </div>
@@ -147,7 +251,7 @@ if (isset($_SESSION['user_name'])) {
             
             // Add title
             doc.setFontSize(18);
-            doc.setTextColor(214, 51, 132); // Pink color
+            doc.setTextColor(67, 97, 238); // Primary color
             doc.text("<?= $translations['export_title'] ?>", 105, 15, { align: 'center' });
             
             // Add metadata
@@ -168,20 +272,14 @@ if (isset($_SESSION['user_name'])) {
                 body: tableData,
                 theme: 'grid',
                 headStyles: {
-                    fillColor: [214, 51, 132], // Pink header
+                    fillColor: [67, 97, 238], // Primary color header
                     textColor: 255
                 },
                 alternateRowStyles: {
-                    fillColor: [255, 222, 235] // Light pink alternate rows
+                    fillColor: [232, 240, 254] // Light blue alternate rows
                 },
                 margin: { top: 10 }
             });
-            
-            // Add floral decoration (text-based)
-            doc.setFontSize(30);
-            doc.setTextColor(214, 51, 132);
-            doc.text('🌸', 20, 20);
-            doc.text('🌼', doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10);
             
             // Save the PDF
             doc.save(`<?= $translations['export_filename'] ?>_${date}.pdf`);
