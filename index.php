@@ -3,15 +3,23 @@ session_start();
 
 try {
     require 'db_connect.php';
-    
-    $name = $_POST['name'] ?? 'Anonymous';
-    $is_returning = isset($_POST['returning_user']) ? 1 : 0;
 
-    $_SESSION['user_name'] = $name; // Save to session for use in questions.php
-    
-    $stmt = $conn->prepare("INSERT INTO visitors (name, is_returning, visit_time) VALUES (?, ?, NOW())");
-    $stmt->bind_param("si", $name, $is_returning);
-    
+    $is_returning = isset($_POST['returning_user']) ? 1 : 0;
+    $name = $_POST['name'] ?? null;
+    $emotion = $_POST['emotion'] ?? null;
+
+    if ($is_returning && !$name) {
+        // This is the returning user button (no name, no emotion)
+        header("Location: questions.php");
+        exit();
+    }
+
+    $name = $name ?? 'Anonymous';
+    $_SESSION['user_name'] = $name;
+
+    $stmt = $conn->prepare("INSERT INTO visitors (name, is_returning, emotion_state, visit_time) VALUES (?, ?, ?, NOW())");
+    $stmt->bind_param("sis", $name, $is_returning, $emotion);
+
     if ($stmt->execute()) {
         $_SESSION['visitor_tracked'] = true;
         $_SESSION['visitor_id'] = $stmt->insert_id;
@@ -36,164 +44,186 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
 <!DOCTYPE html>
 <html lang="<?= $lang ?>">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $translations['welcome_title'] ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3a0ca3;
-            --accent-color: #4cc9f0;
-            --light-bg: #f8f9fa;
-            --text-color: #2b2d42;
-        }
-        
-        body {
-            background-color: var(--light-bg);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .welcome-container {
-            max-width: 500px;
-            margin: auto;
-            padding: 2rem;
-        }
-        
-        .welcome-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            padding: 2.5rem;
-            border: none;
-        }
-        
-        .welcome-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .welcome-header h1 {
-            color: var(--secondary-color);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .welcome-header .icon {
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-        
-        .form-control {
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            transition: all 0.3s;
-        }
-        
-        .form-control:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border: none;
-            padding: 0.75rem;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-        }
-        
-        .btn-link {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-        
-        .btn-link:hover {
-            text-decoration: underline;
-        }
-        
-        .language-selector {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .language-selector .btn {
-            border-radius: 20px;
-            padding: 0.25rem 1rem;
-            border: 1px solid #e0e0e0;
-            color: var(--text-color);
-        }
-        
-        .language-selector .active {
-            background-color: var(--primary-color);
-            color: white !important;
-            border-color: var(--primary-color);
-        }
-        
-        .privacy-notice {
-            background-color: rgba(67, 97, 238, 0.05);
-            border-radius: 8px;
-            padding: 1rem;
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 1.5rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><?= $translations['welcome_title'] ?></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      font-family: 'Outfit', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #fff;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+    }
+
+    .form-floating {
+      margin-bottom: 1rem;
+    }
+
+    .form-control {
+      background-color: transparent;
+      border: 1px solid #ffffff55;
+      color: white;
+    }
+
+    .form-control:focus {
+      border-color: #ffffffaa;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+      background-color: transparent;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, #667eea, #764ba2);
+      border: none;
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    .emoji-picker {
+      display: flex;
+      justify-content: space-between;
+      margin: 1rem 0;
+      font-size: 2rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .emoji-picker input[type="radio"] {
+      display: none;
+    }
+
+    .emoji-picker label {
+      transition: transform 0.2s ease;
+    }
+
+    .emoji-picker input[type="radio"]:checked + label {
+      transform: scale(1.3);
+      filter: drop-shadow(0 0 4px white);
+    }
+
+    .lang-select {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .lang-select a {
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 0.9rem;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .lang-select .active {
+      border-color: white;
+    }
+
+    .privacy-text {
+      font-size: 0.8rem;
+      text-align: center;
+      margin-top: 1rem;
+      opacity: 0.8;
+    }
+  </style>
 </head>
 <body>
-    <div class="welcome-container">
-        <div class="welcome-card">
-            <div class="welcome-header">
-                <div class="icon">👋</div>
-                <h1><?= $translations['welcome_heading'] ?></h1>
-            </div>
-            
-            <div class="language-selector">
-                <?php foreach ($available_langs as $code => $name): ?>
-                    <a href="?lang=<?= $code ?>" class="btn btn-sm <?= $code === $lang ? 'active' : '' ?>">
-                        <?= $name ?>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-            
-            <form method="POST" action="questions.php">
-                <div class="mb-3">
-                    <label for="name" class="form-label"><?= $translations['name_prompt'] ?></label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="<?= $translations['name_placeholder'] ?>" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100 mb-3"><?= $translations['continue_button'] ?></button>
-            </form>
-            
-            <div class="text-center">
-                <form method="POST">
-                    <input type="hidden" name="returning_user" value="1">
-                    <button type="submit" class="btn btn-link">
-                        <?= $translations['returning_user'] ?>
-                    </button>
-                </form>
-            </div>
-            
-            <div class="privacy-notice">
-                <?= $translations['privacy_notice'] ?>
-            </div>
-        </div>
+  <div class="glass-card">
+    <h1><?= $translations['welcome_heading'] ?></h1>
+
+    <div class="lang-select">
+      <?php foreach ($available_langs as $code => $name): ?>
+        <a href="?lang=<?= $code ?>" class="<?= $code === $lang ? 'active' : '' ?>">
+          <?= $name ?>
+        </a>
+      <?php endforeach; ?>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <form method="POST" action="submit_emotion.php">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="name" name="name" placeholder="<?= $translations['name_prompt'] ?>" required>
+        <label for="name"><?= $translations['name_prompt'] ?></label>
+      </div>
+        
+      <div class="mb-3">
+        <label class="form-label d-block text-white fw-semibold" style="font-size: 1.1rem;">
+            <?= $translations['emotion_prompt'] ?? 'How are you feeling today?' ?>
+        </label>
+        <div class="emoji-picker">
+            <input type="radio" name="emotion" id="happy" value="good" checked />
+            <label for="happy" title="<?= $translations['emotion_good'] ?? 'Good' ?>">😊</label>
+
+            <input type="radio" name="emotion" id="okay" value="okay" />
+            <label for="okay" title="<?= $translations['emotion_okay'] ?? 'Okay' ?>">😐</label>
+
+            <input type="radio" name="emotion" id="bad" value="bad" />
+            <label for="bad" title="<?= $translations['emotion_bad'] ?? 'Bad' ?>">😕</label>
+
+            <input type="radio" name="emotion" id="very_sad" value="very_bad" />
+            <label for="very_sad" title="<?= $translations['emotion_very_bad'] ?? 'Very Sad' ?>">😢</label>
+        </div>
+        </div>
+
+      <button type="submit" class="btn btn-primary"><?= $translations['continue_button'] ?></button>
+    </form>
+
+    <div class="text-center mt-3">
+      <form method="POST">
+        <input type="hidden" name="returning_user" value="1" />
+        <button type="submit" class="btn btn-link text-light"><?= $translations['returning_user'] ?></button>
+      </form>
+    </div>
+
+    <div class="privacy-text">
+      <?= $translations['privacy_notice'] ?>
+    </div>
+  </div>
 </body>
 </html>

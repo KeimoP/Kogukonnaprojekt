@@ -20,5 +20,11 @@
     "export_filename": "minu_vastused",
     "no_answer": "Vastus puudub",
     "no_answers_alert": "Palun vasta esmalt mõnele küsimusele!",
-    "new_questions_button": "Uued küsimused"
+    "new_questions_button": "Uued küsimused",
+    "emotion_prompt": "Kuidas sa end täna tunned?",
+    "emotion_good": "Hea",
+    "emotion_okay": "Rahuldav",
+    "emotion_bad": "Halb",
+    "emotion_very_bad": "Väga halb",
+    "back_home": "Tagasi avalehele"
 }

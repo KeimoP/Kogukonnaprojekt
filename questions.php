@@ -65,139 +65,191 @@ $selected_questions = $_SESSION['current_questions'];
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
         :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3a0ca3;
-            --accent-color: #4cc9f0;
-            --light-bg: #f8f9fa;
-            --text-color: #2b2d42;
+        --primary-color: #667eea;
+        --secondary-color: #764ba2;
+        --accent-color: #4cc9f0;
+        --text-color: #ffffff;
         }
-        
+
         body {
-            background-color: var(--light-bg);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
+        background: linear-gradient(135deg, #1f1c2c, #928dab);
+        font-family: 'Outfit', sans-serif;
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        }
+
+        .navbar {
+        width: 100%;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        color: white;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        }
+
+        .navbar-links {
+        display: flex;
+        gap: 1rem;
+        }
+
+        .navbar-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        }
+
+        .navbar-links a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+        .navbar {
             flex-direction: column;
+            align-items: flex-start;
         }
-        
-        .questions-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 1rem;
+
+        .navbar-links {
+            flex-direction: column;
+            width: 100%;
+            margin-top: 1rem;
         }
-        
+
+        .navbar-links a {
+            width: 100%;
+            text-align: left;
+        }
+        }
+
         .questions-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            padding: 2rem;
-            border: none;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        animation: fadeInUp 0.8s ease forwards;
+        margin: 2rem;
         }
-        
-        .questions-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
+
         .questions-header h1 {
-            color: var(--secondary-color);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+        color: white;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-align: center;
         }
-        
-        .questions-header .icon {
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-        
+
         .question-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--accent-color);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid var(--accent-color);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .form-control {
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            transition: all 0.3s;
-            margin-top: 0.5rem;
+        background-color: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: white;
+        border-radius: 8px;
+        margin-top: 0.5rem;
         }
-        
+
         .form-control:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+        border-color: #ffffffaa;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        background-color: transparent;
         }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s;
+
+        .btn-pink {
+        background: linear-gradient(to right, #ff6a8b, #d61e6a);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s;
         }
-        
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
+
+        .btn-pink:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
-        
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            transform: translateY(-2px);
-        }
-        
+
         .btn-export {
-            background-color: #6f42c1;
-            color: white;
-            margin-left: 1rem;
+        background: linear-gradient(to right, #6f42c1, #5a32a3);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s;
         }
-        
+
         .btn-export:hover {
-            background-color: #5a32a3;
-            color: white;
-            transform: translateY(-2px);
+        transform: scale(1.03);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
-        
+
         .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
         }
-        
+
+        @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        }
+
         @media (max-width: 576px) {
-            .action-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn-export {
-                margin-left: 0;
-                margin-top: 1rem;
-            }
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn-export {
+            margin-left: 0;
+            margin-top: 1rem;
+        }
         }
     </style>
 </head>
-<<<<<<< HEAD
 <body class="flower-bg">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm mb-4">
         <div class="container-fluid">
             <a class="navbar-brand text-pink" href="index.php">🌸 <?= $translations['back_home'] ?? 'Back to Start' ?></a>
             <form method="POST" class="d-flex ms-auto align-items-center">
@@ -214,50 +266,28 @@ $selected_questions = $_SESSION['current_questions'];
     <div class="container py-5">
         <div class="questions-card p-4">
             <h1 class="text-center mb-4 text-pink"><?= $translations['questions_heading'] ?> <span class="flower-emoji">🌼</span></h1>
-=======
-<body>
-    <div class="questions-container">
-        <div class="questions-card">
-            <div class="questions-header">
-                <div class="icon">📝</div>
-                <h1><?= $translations['questions_heading'] ?></h1>
-            </div>
->>>>>>> cae871ea0c396f812d79c85b3e293f54599e793e
             
             <form id="questions-form">
                 <?php foreach ($selected_questions as $index => $question): ?>
                     <div class="question-card">
-                        <label class="form-label fw-bold"><?= ($index+1) ?>. <?= $question[$_SESSION['lang']] ?></label>
+                    <label class="form-label fw-bold">🌷 <?= ($index+1) ?>. <?= $question[$_SESSION['lang']] ?></label>
                         <textarea class="form-control" name="answer[<?= $question['id'] ?>]" 
-                                  rows="3" placeholder="<?= $translations['answer_placeholder'] ?>"></textarea>
+                                rows="3" placeholder="<?= $translations['answer_placeholder'] ?>"></textarea>
                     </div>
                 <?php endforeach; ?>
-                
-<<<<<<< HEAD
-                <div class="text-center mt-4">
+            </form>
+
+            <div class="text-center mt-4 action-buttons">
+                <form method="POST" style="display: inline;">
                     <button type="submit" name="new_questions" class="btn btn-pink btn-lg">
                         <?= $translations['new_questions_button'] ?> 🌼
                     </button>
-=======
-                <div class="action-buttons">
-                    <button type="submit" class="btn btn-primary btn-lg"><?= $translations['submit_button'] ?></button>
->>>>>>> cae871ea0c396f812d79c85b3e293f54599e793e
-                    <button type="button" id="export-pdf" class="btn btn-export btn-lg">
-                        <i class="bi bi-file-earmark-pdf"></i> <?= $translations['export_button'] ?>
-                    </button>
-                </div>
-<<<<<<< HEAD
-=======
+                </form>
                 
-                <div class="text-center mt-4">
-                    <form method="POST">
-                        <button type="submit" name="new_questions" class="btn btn-secondary btn-lg">
-                            <?= $translations['new_questions_button'] ?>
-                        </button>
-                    </form>
-                </div>
->>>>>>> cae871ea0c396f812d79c85b3e293f54599e793e
-            </form>
+                <button type="button" id="export-pdf" class="btn btn-export btn-lg">
+                    <i class="bi bi-file-earmark-pdf"></i> <?= $translations['export_button'] ?>
+                </button>
+            </div>
         </div>
     </div>
 

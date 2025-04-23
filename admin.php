@@ -81,14 +81,6 @@ if (!isset($_SESSION['admin_authenticated']) || !$_SESSION['admin_authenticated'
 // Admin dashboard
 require 'db_connect.php';
 
-// DEBUG: Show raw visitor data
-$debug_result = $conn->query("SELECT * FROM visitors ORDER BY visit_time DESC LIMIT 5");
-echo "<pre>Last 5 visitors:\n";
-while ($row = $debug_result->fetch_assoc()) {
-    print_r($row);
-}
-echo "</pre>";
-
 // In admin.php (after authentication)
 $stats = $conn->query("
     SELECT 
@@ -110,6 +102,31 @@ $recent_visitors = $conn->query("
     ORDER BY visit_time DESC 
     LIMIT 10
 ");
+
+$emotion_stats = $conn->query("
+    SELECT 
+        emotion_state,
+        COUNT(*) as count,
+        ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM visitors), 1) as percentage
+    FROM visitors
+    WHERE emotion_state IS NOT NULL
+    GROUP BY emotion_state
+    ORDER BY count DESC
+")->fetch_all(MYSQLI_ASSOC);
+
+// Get daily emotion trends
+$emotion_trends = $conn->query("
+    SELECT 
+        DATE(visit_time) as date,
+        SUM(emotion_state = 'good') as good,
+        SUM(emotion_state = 'okay') as okay,
+        SUM(emotion_state = 'bad') as bad,
+        SUM(emotion_state = 'very_bad') as very_bad
+    FROM visitors
+    WHERE visit_time > DATE_SUB(NOW(), INTERVAL 30 DAY)
+    GROUP BY date
+    ORDER BY date
+")->fetch_all(MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="et">
@@ -132,6 +149,24 @@ $recent_visitors = $conn->query("
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
+        /* Emotion Stats Styles */
+        .emotion-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .bg-emotion-good { background-color: #4ade80; color: white; }
+        .bg-emotion-okay { background-color: #60a5fa; color: white; }
+        .bg-emotion-bad { background-color: #fbbf24; color: black; }
+        .bg-emotion-very-bad { background-color: #f87171; color: white; }
+
+        .chart-container {
+            position: relative;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
@@ -143,7 +178,7 @@ $recent_visitors = $conn->query("
 
         <!-- Summary Cards -->
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="stat-card card text-white bg-primary">
                     <div class="card-body">
                         <h5 class="card-title">Uued külastajad</h5>
@@ -151,19 +186,11 @@ $recent_visitors = $conn->query("
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="stat-card card text-white bg-success">
                     <div class="card-body">
                         <h5 class="card-title">Tagasipöördujad</h5>
                         <h2><?= end($stats)['returning_visitors'] ?? 0 ?></h2>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stat-card card text-white bg-info">
-                    <div class="card-body">
-                        <h5 class="card-title">Unikaalsed külastajad</h5>
-                        <h2><?= end($stats)['unique_visitors'] ?? 0 ?></h2>
                     </div>
                 </div>
             </div>
@@ -177,13 +204,12 @@ $recent_visitors = $conn->query("
         <!-- Recent Visitors -->
         <div class="card mt-4">
             <div class="card-header bg-pink text-white">
-                <h5 class="mb-0">Viimased 10 külastajat</h5>
+                <h5 class="mb-0 text-dark">Viimased 10 külastajat</h5>
             </div>
             <div class="card-body">
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>Nimi</th>
                             <th>Tüüp</th>
                             <th>Külastusaeg</th>
                         </tr>
@@ -191,7 +217,6 @@ $recent_visitors = $conn->query("
                     <tbody>
                         <?php while($visitor = $recent_visitors->fetch_assoc()): ?>
                         <tr>
-                            <td><?= htmlspecialchars($visitor['name'] ?: 'Anonüümne') ?></td>
                             <td><?= $visitor['is_returning'] ? 'Tagasipöörduja' : 'Uus' ?></td>
                             <td><?= date('d.m.Y H:i', strtotime($visitor['visit_time'])) ?></td>
                         </tr>
@@ -200,6 +225,61 @@ $recent_visitors = $conn->query("
                 </table>
             </div>
         </div>
+        <div class="card mt-4">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Kasutajate meeleolud</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!-- Pie Chart -->
+            <div class="col-md-6">
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="emotionChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Stats Table -->
+            <div class="col-md-6">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Meeleseisund</th>
+                            <th>Külastusi</th>
+                            <th>Protsent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($emotion_stats as $stat): ?>
+                        <tr>
+                            <td>
+                                <?php 
+                                $emotion_label = [
+                                    'good' => $translations['emotion_good'],
+                                    'okay' => $translations['emotion_okay'],
+                                    'bad' => $translations['emotion_bad'],
+                                    'very_bad' => $translations['emotion_very_bad']
+                                ][$stat['emotion_state']] ?? $stat['emotion_state'];
+                                echo $emotion_label;
+                                ?>
+                            </td>
+                            <td><?= $stat['count'] ?></td>
+                            <td><?= $stat['percentage'] ?>%</td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Trend Chart -->
+        <div class="mt-4">
+            <h4 class="mb-3">Viimase 30 päeva trend</h4>
+            <div class="chart-container" style="height: 300px;">
+                <canvas id="emotionTrendChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
     </div>
 
     <script>
@@ -237,5 +317,81 @@ $recent_visitors = $conn->query("
             }
         });
     </script>
+    <script>
+// Emotion Distribution Pie Chart
+new Chart(document.getElementById('emotionChart'), {
+    type: 'pie',
+    data: {
+        labels: [
+            '<?= $translations['emotion_good'] ?>',
+            '<?= $translations['emotion_okay'] ?>', 
+            '<?= $translations['emotion_bad'] ?>',
+            '<?= $translations['emotion_very_bad'] ?>'
+        ],
+        datasets: [{
+            data: [
+                <?= $emotion_stats[array_search('good', array_column($emotion_stats, 'emotion_state'))]['count'] ?? 0 ?>,
+                <?= $emotion_stats[array_search('okay', array_column($emotion_stats, 'emotion_state'))]['count'] ?? 0 ?>,
+                <?= $emotion_stats[array_search('bad', array_column($emotion_stats, 'emotion_state'))]['count'] ?? 0 ?>,
+                <?= $emotion_stats[array_search('very_bad', array_column($emotion_stats, 'emotion_state'))]['count'] ?? 0 ?>
+            ],
+            backgroundColor: [
+                '#4ade80', // Good - green
+                '#60a5fa', // Okay - blue
+                '#fbbf24', // Bad - yellow
+                '#f87171'  // Very bad - red
+            ]
+        }]
+    }
+});
+
+// Emotion Trend Chart
+new Chart(document.getElementById('emotionTrendChart'), {
+    type: 'line',
+    data: {
+        labels: <?= json_encode(array_column($emotion_trends, 'date')) ?>,
+        datasets: [
+            {
+                label: '<?= $translations['emotion_good'] ?>',
+                data: <?= json_encode(array_column($emotion_trends, 'good')) ?>,
+                borderColor: '#4ade80',
+                backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                tension: 0.3
+            },
+            {
+                label: '<?= $translations['emotion_okay'] ?>',
+                data: <?= json_encode(array_column($emotion_trends, 'okay')) ?>,
+                borderColor: '#60a5fa',
+                backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                tension: 0.3
+            },
+            {
+                label: '<?= $translations['emotion_bad'] ?>',
+                data: <?= json_encode(array_column($emotion_trends, 'bad')) ?>,
+                borderColor: '#fbbf24',
+                backgroundColor: 'rgba(251, 191, 36, 0.1)',
+                tension: 0.3
+            },
+            {
+                label: '<?= $translations['emotion_very_bad'] ?>',
+                data: <?= json_encode(array_column($emotion_trends, 'very_bad')) ?>,
+                borderColor: '#f87171',
+                backgroundColor: 'rgba(248, 113, 113, 0.1)',
+                tension: 0.3
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Meeleseisundite trend'
+            }
+        }
+    }
+});
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

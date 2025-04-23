@@ -11,7 +11,7 @@
     "answer_placeholder": "Напишите свой ответ здесь...",
     "submit_button": "Отправить ответы",
     "thank_you_message": "Спасибо, что нашли время для себя! ❤️",
-    "export_button": "Сохранить как PDF",
+    "export_button": "Сохраните вопросы для себя",
     "export_title": "Ваши ответы",
     "name_label": "Имя",
     "date_label": "Дата",
@@ -20,5 +20,11 @@
     "export_filename": "мои_ответы",
     "no_answer": "Нет ответа",
     "no_answers_alert": "Пожалуйста, сначала ответьте на несколько вопросов!",
-    "new_questions_button": "Новые вопросы"
+    "new_questions_button": "Новые вопросы",
+    "emotion_prompt": "Как вы себя чувствуете сегодня?",
+    "emotion_good": "Хорошо",
+    "emotion_okay": "Нормально",
+    "emotion_bad": "Плохо",
+    "emotion_very_bad": "Очень плохо",
+    "back_home": "Вернуться на главную"
 }

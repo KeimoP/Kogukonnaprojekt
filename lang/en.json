@@ -11,7 +11,7 @@
     "answer_placeholder": "Write your answer here...",
     "submit_button": "Submit answers",
     "thank_you_message": "Thank you for taking time for yourself! ❤️",
-    "export_button": "Salvesta PDF-na",
+    "export_button": "Save questions to yourself",
     "export_title": "Sinu vastused",
     "name_label": "Nimi",
     "date_label": "Kuupäev",
@@ -20,5 +20,11 @@
     "export_filename": "minu_vastused",
     "no_answer": "Vastus puudub",
     "no_answers_alert": "Palun vasta esmalt mõnele küsimusele!",
-    "new_questions_button": "New Questions"
+    "new_questions_button": "New Questions",
+    "emotion_prompt": "How are you feeling today?",
+    "emotion_good": "Good",
+    "emotion_okay": "Okay",
+    "emotion_bad": "Bad",
+    "emotion_very_bad": "Very bad",
+    "back_home": "Return to homepage"
 }
