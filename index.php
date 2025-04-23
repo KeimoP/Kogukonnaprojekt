@@ -1,34 +1,27 @@
 <?php
 session_start();
 
-// Only track if this is a NEW session
-if (empty($_SESSION['visitor_tracked'])) {
-    try {
-        require 'db_connect.php';
-        
-        $name = $_POST['name'] ?? null;
-        $is_returning = isset($_POST['returning_user']) ? 1 : 0;
-        
-        $stmt = $conn->prepare("INSERT INTO visitors (name, is_returning, visit_time) VALUES (?, ?, NOW())");
-        $stmt->bind_param("si", $name, $is_returning);
-        
-        if ($stmt->execute()) {
-            $_SESSION['visitor_tracked'] = true; // Mark as tracked
-            $_SESSION['visitor_id'] = $stmt->insert_id; // Store ID if needed
-        }
-        $stmt->close();
-    } catch (Exception $e) {
-        error_log("Tracking error: ".$e->getMessage());
+try {
+    require 'db_connect.php';
+    
+    $name = $_POST['name'] ?? 'Anonymous';
+    $is_returning = isset($_POST['returning_user']) ? 1 : 0;
+
+    $_SESSION['user_name'] = $name; // Save to session for use in questions.php
+    
+    $stmt = $conn->prepare("INSERT INTO visitors (name, is_returning, visit_time) VALUES (?, ?, NOW())");
+    $stmt->bind_param("si", $name, $is_returning);
+    
+    if ($stmt->execute()) {
+        $_SESSION['visitor_tracked'] = true;
+        $_SESSION['visitor_id'] = $stmt->insert_id;
     }
+    $stmt->close();
+} catch (Exception $e) {
+    error_log("Tracking error: ".$e->getMessage());
 }
 
-// Your existing redirect logic...
-if (isset($_SESSION['authenticated'])) {
-    header('Location: questions.php');
-    exit;
-}
-
-// Language selection
+// Language setup
 $available_langs = ['et' => 'Eesti', 'en' => 'English', 'ru' => 'Русский'];
 $lang = $_GET['lang'] ?? 'et';
 if (!array_key_exists($lang, $available_langs)) {
@@ -36,7 +29,7 @@ if (!array_key_exists($lang, $available_langs)) {
 }
 $_SESSION['lang'] = $lang;
 
-// Load language file
+// Load translations
 $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
 ?>
 

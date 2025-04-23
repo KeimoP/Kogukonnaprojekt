@@ -1,32 +1,56 @@
 <?php
 session_start();
 
-// Check if user came from welcome page
+// Handle language change
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_lang'])) {
+    $_SESSION['lang'] = $_POST['lang'];
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+
+// Redirect if language not set
 if (empty($_SESSION['lang'])) {
     header('Location: index.php');
     exit;
 }
 
-// Load questions and translations
-$questions = json_decode(file_get_contents('questions.json'), true)['questions'];
-$translations = json_decode(file_get_contents("lang/{$_SESSION['lang']}.json"), true);
+// Enable error reporting for debugging (remove in production)
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Generate or retrieve current questions
-if (!isset($_SESSION['current_questions']) || isset($_POST['new_questions'])) {
-    // Generate new random questions
+// Load questions and translations
+$questionsData = json_decode(file_get_contents('questions.json'), true);
+if (!$questionsData || !isset($questionsData['questions'])) {
+    die('Error: Failed to load or parse questions.json');
+}
+$questions = $questionsData['questions'];
+
+$langFile = "lang/{$_SESSION['lang']}.json";
+if (!file_exists($langFile)) {
+    die('Error: Language file not found.');
+}
+$translations = json_decode(file_get_contents($langFile), true);
+if (!$translations) {
+    die('Error: Failed to decode translation file.');
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['new_questions'])) {
     shuffle($questions);
     $_SESSION['current_questions'] = array_slice($questions, 0, 10);
-    $_SESSION['questions_id'] = uniqid(); // Unique ID for answer storage
+    $_SESSION['questions_id'] = uniqid();
+    header("Location: ".$_SERVER['PHP_SELF']); // Refresh page after POST to avoid resubmission
+    exit;
 }
 
-// Get current question set
-$selected_questions = $_SESSION['current_questions'];
-?>
-<?php
-// Temporary debug - remove after testing
-if (isset($_SESSION['user_name'])) {
-    echo '<div class="alert alert-info">Welcome back, '.htmlspecialchars($_SESSION['user_name']).'! Your visit was recorded.</div>';
+if (!isset($_SESSION['current_questions'])) {
+    shuffle($questions);
+    $_SESSION['current_questions'] = array_slice($questions, 0, 10);
+    $_SESSION['questions_id'] = uniqid();
 }
+
+
+$selected_questions = $_SESSION['current_questions'];
 ?>
 
 <!DOCTYPE html>
@@ -71,6 +95,20 @@ if (isset($_SESSION['user_name'])) {
     </style>
 </head>
 <body class="flower-bg">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand text-pink" href="index.php">🌸 <?= $translations['back_home'] ?? 'Back to Start' ?></a>
+            <form method="POST" class="d-flex ms-auto align-items-center">
+                <input type="hidden" name="change_lang" value="1">
+                <select name="lang" class="form-select me-2" onchange="this.form.submit()">
+                    <option value="en" <?= $_SESSION['lang'] === 'en' ? 'selected' : '' ?>>English</option>
+                    <option value="et" <?= $_SESSION['lang'] === 'et' ? 'selected' : '' ?>>Eesti</option>
+                    <option value="ru" <?= $_SESSION['lang'] === 'ru' ? 'selected' : '' ?>>русский</option>
+                </select>
+            </form>
+        </div>
+    </nav>
+
     <div class="container py-5">
         <div class="questions-card p-4">
             <h1 class="text-center mb-4 text-pink"><?= $translations['questions_heading'] ?> <span class="flower-emoji">🌼</span></h1>
@@ -85,19 +123,13 @@ if (isset($_SESSION['user_name'])) {
                 <?php endforeach; ?>
                 
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-pink btn-lg"><?= $translations['submit_button'] ?></button>
+                    <button type="submit" name="new_questions" class="btn btn-pink btn-lg">
+                        <?= $translations['new_questions_button'] ?> 🌼
+                    </button>
                     <button type="button" id="export-pdf" class="btn btn-export btn-lg">
                         <i class="bi bi-file-earmark-pdf"></i> <?= $translations['export_button'] ?>
                     </button>
                 </div>
-                <div class="text-center mt-4">
-                <form method="POST">
-                    <button type="submit" name="new_questions" class="btn btn-secondary btn-lg">
-                        <?= $translations['new_questions_button'] ?>
-                        <span class="flower-emoji">🌼</span>
-                    </button>
-                </form>
-            </div>
             </form>
         </div>
     </div>

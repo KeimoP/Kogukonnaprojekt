@@ -1,182 +1,184 @@
-[
-  {
-    "id": 1,
-    "et": "Millal viimati tundsid end tõeliselt rahulikuna?",
-    "en": "When was the last time you truly felt at peace?",
-    "ru": "Когда в последний раз ты чувствовал себя по-настоящему спокойно?"
-  },
-  {
-    "id": 2,
-    "et": "Mis väike asi tegi sind täna rõõmsaks?",
-    "en": "What small thing made you happy today?",
-    "ru": "Что маленькое сегодня тебя обрадовало?"
-  },
-  {
-    "id": 3,
-    "et": "Kuidas sa täna enda eest hoolitsesid?",
-    "en": "How did you take care of yourself today?",
-    "ru": "Как ты сегодня заботился о себе?"
-  },
-  {
-    "id": 4,
-    "et": "Mis sind täna üllatas?",
-    "en": "What surprised you today?",
-    "ru": "Что тебя сегодня удивило?"
-  },
-  {
-    "id": 5,
-    "et": "Millest sa täna unistasid?",
-    "en": "What did you dream about today?",
-    "ru": "О чём ты сегодня мечтал?"
-  },
-  {
-    "id": 6,
-    "et": "Kas andsid täna endale midagi head?",
-    "en": "Did you give yourself something good today?",
-    "ru": "Ты дал себе сегодня что-то хорошее?"
-  },
-  {
-    "id": 7,
-    "et": "Milline hetk täna pani sind aja maha võtma?",
-    "en": "What moment today made you slow down?",
-    "ru": "Какой момент сегодня заставил тебя притормозить?"
-  },
-  {
-    "id": 8,
-    "et": "Kelle peale sa täna mõtlesid ootamatult?",
-    "en": "Who did you find yourself thinking about unexpectedly today?",
-    "ru": "О ком ты сегодня неожиданно задумался?"
-  },
-  {
-    "id": 9,
-    "et": "Mis sind täna inspireeris?",
-    "en": "What inspired you today?",
-    "ru": "Что вдохновило тебя сегодня?"
-  },
-  {
-    "id": 10,
-    "et": "Millise tunde võtsid endaga hommikust kaasa?",
-    "en": "What feeling did you carry with you from the morning?",
-    "ru": "Какое чувство ты унес с собой из утра?"
-  },
-  {
-    "id": 11,
-    "et": "Kuidas sa täna teistele toeks olid?",
-    "en": "How were you supportive to someone else today?",
-    "ru": "Как ты сегодня поддержал кого-то?"
-  },
-  {
-    "id": 12,
-    "et": "Mis täna sinu tähelepanu köitis?",
-    "en": "What caught your attention today?",
-    "ru": "Что сегодня привлекло твоё внимание?"
-  },
-  {
-    "id": 13,
-    "et": "Kas sul oli hetk, kus tundsid end tõeliselt elusana?",
-    "en": "Did you have a moment where you felt truly alive?",
-    "ru": "Был ли у тебя момент, когда ты чувствовал себя по-настоящему живым?"
-  },
-  {
-    "id": 14,
-    "et": "Mida uut sa enda kohta täna õppisid?",
-    "en": "What did you learn about yourself today?",
-    "ru": "Что нового ты сегодня узнал о себе?"
-  },
-  {
-    "id": 15,
-    "et": "Kus su meel täna kõige rohkem rändas?",
-    "en": "Where did your mind wander the most today?",
-    "ru": "Куда сегодня больше всего блуждали твои мысли?"
-  },
-  {
-    "id": 16,
-    "et": "Mis hetkel tundsid tänulikkust?",
-    "en": "When did you feel gratitude today?",
-    "ru": "Когда сегодня ты почувствовал благодарность?"
-  },
-  {
-    "id": 17,
-    "et": "Mida oleksid tahtnud täna teisiti teha?",
-    "en": "What would you have liked to do differently today?",
-    "ru": "Что бы ты хотел сегодня сделать иначе?"
-  },
-  {
-    "id": 18,
-    "et": "Kellele tahaksid täna öelda midagi head?",
-    "en": "Who would you like to say something kind to today?",
-    "ru": "Кому бы ты хотел сказать что-то хорошее сегодня?"
-  },
-  {
-    "id": 19,
-    "et": "Mis aitas sul täna keskenduda?",
-    "en": "What helped you stay focused today?",
-    "ru": "Что помогло тебе сегодня сосредоточиться?"
-  },
-  {
-    "id": 20,
-    "et": "Millal tundsid end täna kuulduna?",
-    "en": "When did you feel heard today?",
-    "ru": "Когда ты сегодня почувствовал, что тебя услышали?"
-  },
-  {
-    "id": 21,
-    "et": "Mis tuletas sulle täna meelde lapsepõlve?",
-    "en": "What reminded you of your childhood today?",
-    "ru": "Что напомнило тебе сегодня о детстве?"
-  },
-  {
-    "id": 22,
-    "et": "Kuidas su keha end täna tundis?",
-    "en": "How did your body feel today?",
-    "ru": "Как сегодня чувствовало себя твоё тело?"
-  },
-  {
-    "id": 23,
-    "et": "Millist otsust sa täna kaalusid pikemalt?",
-    "en": "What decision did you spend time considering today?",
-    "ru": "Какое решение ты обдумывал сегодня дольше всего?"
-  },
-  {
-    "id": 24,
-    "et": "Kuidas sa täna lõõgastusid?",
-    "en": "How did you relax today?",
-    "ru": "Как ты сегодня расслаблялся?"
-  },
-  {
-    "id": 25,
-    "et": "Mis sulle täna väljakutseid pakkus?",
-    "en": "What challenged you today?",
-    "ru": "Что стало для тебя вызовом сегодня?"
-  },
-  {
-    "id": 26,
-    "et": "Millal täna tundsid end ühenduses kellegi või millegagi?",
-    "en": "When today did you feel connected to someone or something?",
-    "ru": "Когда сегодня ты почувствовал связь с кем-то или с чем-то?"
-  },
-  {
-    "id": 27,
-    "et": "Millist hetke sooviksid täna uuesti kogeda?",
-    "en": "What moment from today would you like to relive?",
-    "ru": "Какой момент сегодняшнего дня ты бы хотел пережить снова?"
-  },
-  {
-    "id": 28,
-    "et": "Mis mõte jäi sul täna kõige rohkem meelde?",
-    "en": "What thought stuck with you the most today?",
-    "ru": "Какая мысль больше всего запомнилась тебе сегодня?"
-  },
-  {
-    "id": 29,
-    "et": "Kuidas sa täna end üllatasid?",
-    "en": "How did you surprise yourself today?",
-    "ru": "Чем ты удивил сам себя сегодня?"
-  },
-  {
-    "id": 30,
-    "et": "Millest sa täna loobusid ja miks?",
-    "en": "What did you let go of today, and why?",
-    "ru": "От чего ты сегодня отказался и почему?"
+{
+  "questions": [
+    {
+      "id": 1,
+      "et": "Millal viimati tundsid end tõeliselt rahulikuna?",
+      "en": "When was the last time you truly felt at peace?",
+      "ru": "Когда в последний раз ты чувствовал себя по-настоящему спокойно?"
+    },
+    {
+      "id": 2,
+      "et": "Mis väike asi tegi sind täna rõõmsaks?",
+      "en": "What small thing made you happy today?",
+      "ru": "Что маленькое сегодня тебя обрадовало?"
+    },
+    {
+      "id": 3,
+      "et": "Kuidas sa täna enda eest hoolitsesid?",
+      "en": "How did you take care of yourself today?",
+      "ru": "Как ты сегодня заботился о себе?"
+    },
+    {
+      "id": 4,
+      "et": "Mis sind täna üllatas?",
+      "en": "What surprised you today?",
+      "ru": "Что тебя сегодня удивило?"
+    },
+    {
+      "id": 5,
+      "et": "Millest sa täna unistasid?",
+      "en": "What did you dream about today?",
+      "ru": "О чём ты сегодня мечтал?"
+    },
+    {
+      "id": 6,
+      "et": "Kas andsid täna endale midagi head?",
+      "en": "Did you give yourself something good today?",
+      "ru": "Ты дал себе сегодня что-то хорошее?"
+    },
+    {
+      "id": 7,
+      "et": "Milline hetk täna pani sind aja maha võtma?",
+      "en": "What moment today made you slow down?",
+      "ru": "Какой момент сегодня заставил тебя притормозить?"
+    },
+    {
+      "id": 8,
+      "et": "Kelle peale sa täna mõtlesid ootamatult?",
+      "en": "Who did you find yourself thinking about unexpectedly today?",
+      "ru": "О ком ты сегодня неожиданно задумался?"
+    },
+    {
+      "id": 9,
+      "et": "Mis sind täna inspireeris?",
+      "en": "What inspired you today?",
+      "ru": "Что вдохновило тебя сегодня?"
+    },
+    {
+      "id": 10,
+      "et": "Millise tunde võtsid endaga hommikust kaasa?",
+      "en": "What feeling did you carry with you from the morning?",
+      "ru": "Какое чувство ты унес с собой из утра?"
+    },
+    {
+      "id": 11,
+      "et": "Kuidas sa täna teistele toeks olid?",
+      "en": "How were you supportive to someone else today?",
+      "ru": "Как ты сегодня поддержал кого-то?"
+    },
+    {
+      "id": 12,
+      "et": "Mis täna sinu tähelepanu köitis?",
+      "en": "What caught your attention today?",
+      "ru": "Что сегодня привлекло твоё внимание?"
+    },
+    {
+      "id": 13,
+      "et": "Kas sul oli hetk, kus tundsid end tõeliselt elusana?",
+      "en": "Did you have a moment where you felt truly alive?",
+      "ru": "Был ли у тебя момент, когда ты чувствовал себя по-настоящему живым?"
+    },
+    {
+      "id": 14,
+      "et": "Mida uut sa enda kohta täna õppisid?",
+      "en": "What did you learn about yourself today?",
+      "ru": "Что нового ты сегодня узнал о себе?"
+    },
+    {
+      "id": 15,
+      "et": "Kus su meel täna kõige rohkem rändas?",
+      "en": "Where did your mind wander the most today?",
+      "ru": "Куда сегодня больше всего блуждали твои мысли?"
+    },
+    {
+      "id": 16,
+      "et": "Mis hetkel tundsid tänulikkust?",
+      "en": "When did you feel gratitude today?",
+      "ru": "Когда сегодня ты почувствовал благодарность?"
+    },
+    {
+      "id": 17,
+      "et": "Mida oleksid tahtnud täna teisiti teha?",
+      "en": "What would you have liked to do differently today?",
+      "ru": "Что бы ты хотел сегодня сделать иначе?"
+    },
+    {
+      "id": 18,
+      "et": "Kellele tahaksid täna öelda midagi head?",
+      "en": "Who would you like to say something kind to today?",
+      "ru": "Кому бы ты хотел сказать что-то хорошее сегодня?"
+    },
+    {
+      "id": 19,
+      "et": "Mis aitas sul täna keskenduda?",
+      "en": "What helped you stay focused today?",
+      "ru": "Что помогло тебе сегодня сосредоточиться?"
+    },
+    {
+      "id": 20,
+      "et": "Millal tundsid end täna kuulduna?",
+      "en": "When did you feel heard today?",
+      "ru": "Когда ты сегодня почувствовал, что тебя услышали?"
+    },
+    {
+      "id": 21,
+      "et": "Mis tuletas sulle täna meelde lapsepõlve?",
+      "en": "What reminded you of your childhood today?",
+      "ru": "Что напомнило тебе сегодня о детстве?"
+    },
+    {
+      "id": 22,
+      "et": "Kuidas su keha end täna tundis?",
+      "en": "How did your body feel today?",
+      "ru": "Как сегодня чувствовало себя твоё тело?"
+    },
+    {
+      "id": 23,
+      "et": "Millist otsust sa täna kaalusid pikemalt?",
+      "en": "What decision did you spend time considering today?",
+      "ru": "Какое решение ты обдумывал сегодня дольше всего?"
+    },
+    {
+      "id": 24,
+      "et": "Kuidas sa täna lõõgastusid?",
+      "en": "How did you relax today?",
+      "ru": "Как ты сегодня расслаблялся?"
+    },
+    {
+      "id": 25,
+      "et": "Mis sulle täna väljakutseid pakkus?",
+      "en": "What challenged you today?",
+      "ru": "Что стало для тебя вызовом сегодня?"
+    },
+    {
+      "id": 26,
+      "et": "Millal täna tundsid end ühenduses kellegi või millegagi?",
+      "en": "When today did you feel connected to someone or something?",
+      "ru": "Когда сегодня ты почувствовал связь с кем-то или с чем-то?"
+    },
+    {
+      "id": 27,
+      "et": "Millist hetke sooviksid täna uuesti kogeda?",
+      "en": "What moment from today would you like to relive?",
+      "ru": "Какой момент сегодняшнего дня ты бы хотел пережить снова?"
+    },
+    {
+      "id": 28,
+      "et": "Mis mõte jäi sul täna kõige rohkem meelde?",
+      "en": "What thought stuck with you the most today?",
+      "ru": "Какая мысль больше всего запомнилась тебе сегодня?"
+    },
+    {
+      "id": 29,
+      "et": "Kuidas sa täna end üllatasid?",
+      "en": "How did you surprise yourself today?",
+      "ru": "Чем ты удивил сам себя сегодня?"
+    },
+    {
+      "id": 30,
+      "et": "Millest sa täna loobusid ja miks?",
+      "en": "What did you let go of today, and why?",
+      "ru": "От чего ты сегодня отказался и почему?"
+    }
+  ]
   }
-]
