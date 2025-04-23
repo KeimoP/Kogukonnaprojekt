@@ -245,6 +245,9 @@ $selected_questions = $_SESSION['current_questions'];
             margin-left: 0;
             margin-top: 1rem;
         }
+        .questions-card {
+            margin: 0rem;
+        }
         }
     </style>
 </head>
