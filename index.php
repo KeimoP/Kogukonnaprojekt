@@ -39,6 +39,10 @@ $_SESSION['lang'] = $lang;
 
 // Load translations
 $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
+
+if ($emotion === 'very_bad') {
+  header("Location: index.php?show_help=1");
+}
 ?>
 
 <!DOCTYPE html>
@@ -172,6 +176,13 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
       margin-top: 1rem;
       opacity: 0.8;
     }
+    #helpInfo {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
   </style>
 </head>
 <body>
@@ -224,6 +235,41 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
     <div class="privacy-text">
       <?= $translations['privacy_notice'] ?>
     </div>
+    <div class="text-center mt-4">
+    <button class="btn btn-outline-light" onclick="toggleHelp()">
+      <?= $translations['help_button'] ?>
+    </button>
+
+    <div id="helpInfo" style="display: <?= $show_help ? 'block' : 'none' ?>; margin-top: 1rem; font-size: 0.9rem; line-height: 1.6;">
+      <strong><?= $translations['help_title'] ?></strong><br>
+      <ul style="list-style: none; padding: 0;">
+        <li>📞 <?= $translations['help_estonia'] ?></li>
+        <li>🌐 <a href="https://findahelpline.com" target="_blank" style="color: #fff; text-decoration: underline;">
+          <?= $translations['help_global'] ?>
+        </a></li>
+        <li>🧠 <?= $translations['help_local'] ?></li>
+      </ul>
+    </div>
   </div>
+  </div>
+  <script>
+      function toggleHelp() {
+        const helpInfo = document.getElementById('helpInfo');
+        const wasHidden = helpInfo.style.display === 'none';
+        helpInfo.style.display = wasHidden ? 'block' : 'none';
+        if (wasHidden) {
+          helpInfo.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      <?php if ($show_help): ?>
+        // Auto-scroll to help section on load
+        window.addEventListener('load', () => {
+          const helpInfo = document.getElementById('helpInfo');
+          if (helpInfo) helpInfo.scrollIntoView({ behavior: 'smooth' });
+        });
+      <?php endif; ?>
+    </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

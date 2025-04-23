@@ -26,5 +26,10 @@
     "emotion_okay": "Okay",
     "emotion_bad": "Bad",
     "emotion_very_bad": "Very bad",
-    "back_home": "Return to homepage"
+    "back_home": "Return to homepage",
+    "help_button": "Need help?",
+    "help_title": "If you're in crisis, please reach out:",
+    "help_estonia": "Estonia: 116 123 (Free emotional support)",
+    "help_global": "International: findahelpline.com",
+    "help_local": "Mental Health Center: 552 6929 (Tallinn Psychologist)"
 }
