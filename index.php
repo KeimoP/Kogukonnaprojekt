@@ -1,48 +1,66 @@
 <?php
 session_start();
 
-try {
-    require 'db_connect.php';
+require_once('db_connect.php'); // Include your database connection file
 
-    $is_returning = isset($_POST['returning_user']) ? 1 : 0;
-    $name = $_POST['name'] ?? null;
-    $emotion = $_POST['emotion'] ?? null;
+// Generate a unique identifier based on IP and User-Agent
+$device_identifier = md5($_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 
-    if ($is_returning && !$name) {
-        // This is the returning user button (no name, no emotion)
-        header("Location: questions.php");
-        exit();
-    }
+// Connect to the database
+$conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
-    $name = $name ?? 'Anonymous';
-    $_SESSION['user_name'] = $name;
-
-    $stmt = $conn->prepare("INSERT INTO visitors (name, is_returning, emotion_state, visit_time) VALUES (?, ?, ?, NOW())");
-    $stmt->bind_param("sis", $name, $is_returning, $emotion);
-
-    if ($stmt->execute()) {
-        $_SESSION['visitor_tracked'] = true;
-        $_SESSION['visitor_id'] = $stmt->insert_id;
-    }
-    $stmt->close();
-} catch (Exception $e) {
-    error_log("Tracking error: ".$e->getMessage());
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Language setup
+// Check if this device has been recorded already
+$query = "SELECT * FROM device_tracker WHERE device_identifier = '$device_identifier'";
+$result = $conn->query($query);
+
+// If not found, insert a new device record
+if ($result->num_rows === 0) {
+    $insert_query = "INSERT INTO device_tracker (device_identifier) VALUES ('$device_identifier')";
+}
+
+// Optionally, you can count unique devices
+$query_count = "SELECT COUNT(*) AS device_count FROM device_tracker";
+$result_count = $conn->query($query_count);
+$row = $result_count->fetch_assoc();
+
+// Close the database connection
+$conn->close();
+
+// Language setup (no change)
 $available_langs = ['et' => 'Eesti', 'en' => 'English', 'ru' => 'Русский'];
-$lang = $_GET['lang'] ?? 'et';
-if (!array_key_exists($lang, $available_langs)) {
+
+// Check for lang in URL first
+$lang = $_GET['lang'] ?? null;
+
+// If not set, check session
+if (!$lang && isset($_SESSION['lang'])) {
+    $lang = $_SESSION['lang'];
+}
+
+// If still not set, try browser settings
+if (!$lang && isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+    // Extract primary language code (e.g., "en-US" → "en")
+    $browser_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+    if (array_key_exists($browser_lang, $available_langs)) {
+        $lang = $browser_lang;
+    }
+}
+
+// Default to Estonian
+if (!$lang || !array_key_exists($lang, $available_langs)) {
     $lang = 'et';
 }
+
+// Store in session
 $_SESSION['lang'] = $lang;
 
 // Load translations
 $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
-
-if ($emotion === 'very_bad') {
-  header("Location: index.php?show_help=1");
-}
 ?>
 
 <!DOCTYPE html>
@@ -51,139 +69,10 @@ if ($emotion === 'very_bad') {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><?= $translations['welcome_title'] ?></title>
+  <link rel="icon" href="assets/images/logo.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      background: linear-gradient(135deg, #1f1c2c, #928dab);
-      font-family: 'Outfit', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      color: #fff;
-    }
-
-    .glass-card {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 20px;
-      padding: 2rem;
-      max-width: 450px;
-      width: 100%;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      animation: fadeInUp 0.8s ease forwards;
-    }
-
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    h1 {
-      text-align: center;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      font-size: 2rem;
-    }
-
-    .form-floating {
-      margin-bottom: 1rem;
-    }
-
-    .form-control {
-      background-color: transparent;
-      border: 1px solid #ffffff55;
-      color: white;
-    }
-
-    .form-control:focus {
-      border-color: #ffffffaa;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-      background-color: transparent;
-    }
-
-    .btn-primary {
-      background: linear-gradient(to right, #667eea, #764ba2);
-      border: none;
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .btn-primary:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-    }
-
-    .emoji-picker {
-      display: flex;
-      justify-content: space-between;
-      margin: 1rem 0;
-      font-size: 2rem;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .emoji-picker input[type="radio"] {
-      display: none;
-    }
-
-    .emoji-picker label {
-      transition: transform 0.2s ease;
-    }
-
-    .emoji-picker input[type="radio"]:checked + label {
-      transform: scale(1.3);
-      filter: drop-shadow(0 0 4px white);
-    }
-
-    .lang-select {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .lang-select a {
-      padding: 0.3rem 1rem;
-      border-radius: 50px;
-      background-color: rgba(255, 255, 255, 0.1);
-      color: white;
-      font-size: 0.9rem;
-      text-decoration: none;
-      border: 1px solid transparent;
-    }
-
-    .lang-select .active {
-      border-color: white;
-    }
-
-    .privacy-text {
-      font-size: 0.8rem;
-      text-align: center;
-      margin-top: 1rem;
-      opacity: 0.8;
-    }
-    #helpInfo {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 1rem;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-  </style>
+  <link rel="stylesheet" href="assets/css/index.css" !important />
 </head>
 <body>
   <div class="glass-card">
@@ -197,42 +86,40 @@ if ($emotion === 'very_bad') {
       <?php endforeach; ?>
     </div>
 
-    <form method="POST" action="submit_emotion.php">
-      <div class="form-floating">
+    <form method="POST" action="questions.php">
+      <div class="form-floating text-dark">
         <input type="text" class="form-control" id="name" name="name" placeholder="<?= $translations['name_prompt'] ?>" required>
         <label for="name"><?= $translations['name_prompt'] ?></label>
       </div>
-        
       <div class="mb-3">
         <label class="form-label d-block text-white fw-semibold" style="font-size: 1.1rem;">
             <?= $translations['emotion_prompt'] ?? 'How are you feeling today?' ?>
         </label>
         <div class="emoji-picker">
-            <input type="radio" name="emotion" id="happy" value="good" checked />
-            <label for="happy" title="<?= $translations['emotion_good'] ?? 'Good' ?>">😊</label>
+          <input type="radio" name="emotion" id="happy" value="happy" checked />
+          <label for="happy" title="<?= $translations['emotion_happy'] ?? 'Happy' ?>">😊</label>
 
-            <input type="radio" name="emotion" id="okay" value="okay" />
-            <label for="okay" title="<?= $translations['emotion_okay'] ?? 'Okay' ?>">😐</label>
+          <input type="radio" name="emotion" id="okei" value="okei" />
+          <label for="okei" title="<?= $translations['emotion_okei'] ?? 'Okei' ?>">😐</label>
 
-            <input type="radio" name="emotion" id="bad" value="bad" />
-            <label for="bad" title="<?= $translations['emotion_bad'] ?? 'Bad' ?>">😕</label>
+          <input type="radio" name="emotion" id="sad" value="sad" />
+          <label for="sad" title="<?= $translations['emotion_sad'] ?? 'Sad' ?>">😕</label>
 
-            <input type="radio" name="emotion" id="very_sad" value="very_bad" />
-            <label for="very_sad" title="<?= $translations['emotion_very_bad'] ?? 'Very Sad' ?>">😢</label>
+          <input type="radio" name="emotion" id="very_sad" value="very_sad" />
+          <label for="very_sad" title="<?= $translations['emotion_very_sad'] ?? 'Very Sad' ?>">😢</label>
         </div>
-        </div>
-
+      </div>
       <button type="submit" class="btn btn-primary"><?= $translations['continue_button'] ?></button>
     </form>
 
     <div class="text-center mt-3">
-      <form method="POST">
+      <form method="POST" action="questions.php">
         <input type="hidden" name="returning_user" value="1" />
         <button type="submit" class="btn btn-link text-light"><?= $translations['returning_user'] ?></button>
       </form>
     </div>
 
-    <div class="privacy-text">
+    <div class="privacy-text rounded-2 p-4">
       <?= $translations['privacy_notice'] ?>
     </div>
     <div class="text-center mt-4">
@@ -244,32 +131,61 @@ if ($emotion === 'very_bad') {
       <strong><?= $translations['help_title'] ?></strong><br>
       <ul style="list-style: none; padding: 0;">
         <li>📞 <?= $translations['help_estonia'] ?></li>
-        <li>🌐 <a href="https://findahelpline.com" target="_blank" style="color: #fff; text-decoration: underline;">
-          <?= $translations['help_global'] ?>
-        </a></li>
+        <li>🌐 <a href="https://findahelpline.com" target="_blank" style="color: #fff; text-decoration: underline;"><?= $translations['help_global'] ?></a></li>
+        <li>🌐 <a href="https://www.peaasi.ee" style="color: #fff; text-decoration: underline;" target="_blank"><?= $translations['help_eesti'] ?></a></li>
+        <li>🌐 <a href="https://www.eluliin.ee" style="color: #fff; text-decoration: underline;" target="_blank"><?= $translations['help_kriis'] ?></a></li>
         <li>🧠 <?= $translations['help_local'] ?></li>
       </ul>
     </div>
   </div>
   </div>
   <script>
-      function toggleHelp() {
-        const helpInfo = document.getElementById('helpInfo');
-        const wasHidden = helpInfo.style.display === 'none';
-        helpInfo.style.display = wasHidden ? 'block' : 'none';
-        if (wasHidden) {
-          helpInfo.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
+    // Color shifting background
+    function updateBackground() {
+      const hue = (Date.now() / 10000) % 360;
+      document.documentElement.style.setProperty('--primary-hue', hue);
+      requestAnimationFrame(updateBackground);
+    }
+    updateBackground();
 
-      <?php if ($show_help): ?>
-        // Auto-scroll to help section on load
-        window.addEventListener('load', () => {
-          const helpInfo = document.getElementById('helpInfo');
-          if (helpInfo) helpInfo.scrollIntoView({ behavior: 'smooth' });
-        });
-      <?php endif; ?>
-    </script>
+    // Initialize particles
+    document.addEventListener('DOMContentLoaded', function() {
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: "#ffffff" },
+          shape: { type: "circle" },
+          opacity: { value: 0.5, random: true },
+          size: { value: 3, random: true },
+          line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+          move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onhover: { enable: true, mode: "repulse" },
+            onclick: { enable: true, mode: "push" }
+          }
+        }
+      });
+    });
+
+    function toggleHelp() {
+      const helpInfo = document.getElementById('helpInfo');
+      const wasHidden = helpInfo.style.display === 'none';
+      helpInfo.style.display = wasHidden ? 'block' : 'none';
+      if (wasHidden) {
+        helpInfo.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    <?php if ($show_help): ?>
+      window.addEventListener('load', () => {
+        const helpInfo = document.getElementById('helpInfo');
+        if (helpInfo) helpInfo.scrollIntoView({ behavior: 'smooth' });
+      });
+    <?php endif; ?>
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

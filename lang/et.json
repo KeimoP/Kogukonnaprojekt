@@ -27,9 +27,12 @@
     "emotion_bad": "Halb",
     "emotion_very_bad": "Väga halb",
     "back_home": "Tagasi avalehele",
-    "help_button": "Vajad abi?",
+    "help_button": "Vajad emotsionaalset tuge?",
     "help_title": "Kui oled kriisis, pöördu palun abi saamiseks:",
     "help_estonia": "Eesti: 116 123 (Tasuta emotsionaalne tugi)",
+    "help_eesti": "Eesti: www.peaasi.ee",
     "help_global": "Rahvusvaheline: findahelpline.com",
-    "help_local": "Vaimse tervise keskus: 552 6929 (Tallinna psühholoog)"
+    "help_kriis": "Kriisi olukorras: www.eluliin.ee",
+    "help_local": "Vaimse tervise keskus: 552 6929 (Tallinna psühholoog)",
+    "good_idea": "Hea mõte"
 }
