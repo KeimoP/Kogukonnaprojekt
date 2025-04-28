@@ -2,7 +2,7 @@
 session_start();
 
 require_once('db_connect.php'); // Include your database connection file
-
+$show_help = false;
 // Generate a unique identifier based on IP and User-Agent
 $device_identifier = md5($_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 
@@ -140,36 +140,6 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
   </div>
   </div>
   <script>
-    // Color shifting background
-    function updateBackground() {
-      const hue = (Date.now() / 10000) % 360;
-      document.documentElement.style.setProperty('--primary-hue', hue);
-      requestAnimationFrame(updateBackground);
-    }
-    updateBackground();
-
-    // Initialize particles
-    document.addEventListener('DOMContentLoaded', function() {
-      particlesJS('particles-js', {
-        particles: {
-          number: { value: 80, density: { enable: true, value_area: 800 } },
-          color: { value: "#ffffff" },
-          shape: { type: "circle" },
-          opacity: { value: 0.5, random: true },
-          size: { value: 3, random: true },
-          line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
-          move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
-        },
-        interactivity: {
-          detect_on: "canvas",
-          events: {
-            onhover: { enable: true, mode: "repulse" },
-            onclick: { enable: true, mode: "push" }
-          }
-        }
-      });
-    });
-
     function toggleHelp() {
       const helpInfo = document.getElementById('helpInfo');
       const wasHidden = helpInfo.style.display === 'none';
