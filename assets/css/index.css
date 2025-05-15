@@ -1,17 +1,14 @@
 :root {
-  --primary-hue: 260;
-  --primary-color: hsl(var(--primary-hue), 100%, 65%);
-  --secondary-color: hsl(calc(var(--primary-hue) + 60), 100%, 65%);
-  --bg-color: hsl(var(--primary-hue), 40%, 10%);
-  --text-color: #ffffff;
-  --glass-color: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --primary-hue: 220;
+  --primary-color: hsl(var(--primary-hue), 60%, 60%);
+  --secondary-color: hsl(calc(var(--primary-hue) + 30), 60%, 60%);
+  --bg-color: hsl(var(--primary-hue), 30%, 12%);
+  --text-color: #f5f5f5;
 }
 
 body {
   background: linear-gradient(135deg, var(--bg-color), hsl(var(--primary-hue), 40%, 20%));
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Inter', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -70,7 +67,8 @@ body {
   margin-bottom: 2rem;
 }
 
-h1 {
+h1, h2, h3 {
+  font-family: 'Outfit', sans-serif;
   text-align: center;
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -159,10 +157,14 @@ h1 {
 }
 
 .btn-primary {
-  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-  color: white;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 15px rgba(var(--primary-color), 0.4);
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 1rem;
+  box-shadow: none;
+}
+
+.btn-primary:hover {
+  background: hsl(var(--primary-hue), 60%, 50%);
 }
 
 .btn-gradient {
@@ -314,7 +316,7 @@ h1 {
   font-weight: bold;
 }
 
-#helpInfo {
+#helpInfo, #aboutInfo {
   background: rgba(0, 0, 0, 0.3);
   padding: 1.5rem;
   border-radius: 12px;
@@ -328,26 +330,26 @@ h1 {
   to { opacity: 1; transform: translateY(0); }
 }
 
-#helpInfo ul {
+#helpInfo ul, #aboutInfo ul{
   list-style: none;
   padding: 0;
   margin: 1rem 0 0;
 }
 
-#helpInfo li {
+#helpInfo li, #aboutInfo li {
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 0.8rem;
 }
 
-#helpInfo a {
+#helpInfo a, #aboutInfo a {
   color: var(--primary-color);
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
-#helpInfo a:hover {
+#helpInfo a:hover, #aboutInfo a:hover {
   text-decoration: underline;
 }
 

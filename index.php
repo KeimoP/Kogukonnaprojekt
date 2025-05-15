@@ -11,7 +11,7 @@ $conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
 // Check the connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+  die("Connection failed: " . $conn->connect_error);
 }
 
 // Check if this device has been recorded already
@@ -20,7 +20,7 @@ $result = $conn->query($query);
 
 // If not found, insert a new device record
 if ($result->num_rows === 0) {
-    $insert_query = "INSERT INTO device_tracker (device_identifier) VALUES ('$device_identifier')";
+  $insert_query = "INSERT INTO device_tracker (device_identifier) VALUES ('$device_identifier')";
 }
 
 // Optionally, you can count unique devices
@@ -39,21 +39,21 @@ $lang = $_GET['lang'] ?? null;
 
 // If not set, check session
 if (!$lang && isset($_SESSION['lang'])) {
-    $lang = $_SESSION['lang'];
+  $lang = $_SESSION['lang'];
 }
 
 // If still not set, try browser settings
 if (!$lang && isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-    // Extract primary language code (e.g., "en-US" → "en")
-    $browser_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-    if (array_key_exists($browser_lang, $available_langs)) {
-        $lang = $browser_lang;
-    }
+  // Extract primary language code (e.g., "en-US" → "en")
+  $browser_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+  if (array_key_exists($browser_lang, $available_langs)) {
+    $lang = $browser_lang;
+  }
 }
 
 // Default to Estonian
 if (!$lang || !array_key_exists($lang, $available_langs)) {
-    $lang = 'et';
+  $lang = 'et';
 }
 
 // Store in session
@@ -65,6 +65,7 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
 
 <!DOCTYPE html>
 <html lang="<?= $lang ?>">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -74,6 +75,7 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/index.css" !important />
 </head>
+
 <body>
   <div class="glass-card">
     <h1><?= $translations['welcome_heading'] ?></h1>
@@ -88,12 +90,13 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
 
     <form method="POST" action="questions.php">
       <div class="form-floating text-dark">
-        <input type="text" class="form-control" id="name" name="name" placeholder="<?= $translations['name_prompt'] ?>" required>
+        <input type="text" class="form-control" id="name" name="name" placeholder="<?= $translations['name_prompt'] ?>"
+          required>
         <label for="name"><?= $translations['name_prompt'] ?></label>
       </div>
       <div class="mb-3">
         <label class="form-label d-block text-white fw-semibold" style="font-size: 1.1rem;">
-            <?= $translations['emotion_prompt'] ?? 'How are you feeling today?' ?>
+          <?= $translations['emotion_prompt'] ?? 'How are you feeling today?' ?>
         </label>
         <div class="emoji-picker">
           <input type="radio" name="emotion" id="happy" value="happy" checked />
@@ -123,20 +126,32 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
       <?= $translations['privacy_notice'] ?>
     </div>
     <div class="text-center mt-4">
-    <button class="btn btn-outline-light" onclick="toggleHelp()">
-      <?= $translations['help_button'] ?>
-    </button>
+      <button class="btn btn-outline-light" onclick="toggleHelp()">
+        <?= $translations['help_button'] ?>
+      </button>
 
-    <div id="helpInfo" style="display: <?= $show_help ? 'block' : 'none' ?>; margin-top: 1rem; font-size: 0.9rem; line-height: 1.6;">
+    <div id="helpInfo"
+      style="display: <?= $show_help ? 'block' : 'none' ?>; margin-top: 1rem; font-size: 0.9rem; line-height: 1.6;">
       <strong><?= $translations['help_title'] ?></strong><br>
       <ul style="list-style: none; padding: 0;">
         <li>📞 <?= $translations['help_estonia'] ?></li>
-        <li>🌐 <a href="https://findahelpline.com" target="_blank" style="color: #fff; text-decoration: underline;"><?= $translations['help_global'] ?></a></li>
-        <li>🌐 <a href="https://www.peaasi.ee" style="color: #fff; text-decoration: underline;" target="_blank"><?= $translations['help_eesti'] ?></a></li>
-        <li>🌐 <a href="https://www.eluliin.ee" style="color: #fff; text-decoration: underline;" target="_blank"><?= $translations['help_kriis'] ?></a></li>
+        <li>🌐 <a href="https://findahelpline.com" target="_blank"
+            style="color: #fff; text-decoration: underline;"><?= $translations['help_global'] ?></a></li>
+        <li>🌐 <a href="https://www.peaasi.ee" style="color: #fff; text-decoration: underline;"
+            target="_blank"><?= $translations['help_eesti'] ?></a></li>
+        <li>🌐 <a href="https://www.eluliin.ee" style="color: #fff; text-decoration: underline;"
+            target="_blank"><?= $translations['help_kriis'] ?></a></li>
         <li>🧠 <?= $translations['help_local'] ?></li>
       </ul>
     </div>
+    <button class="btn btn-outline-light ms-2" onclick="toggleAbout()">
+        <?= $translations['about_button'] ?>
+      </button>
+    <div id="aboutInfo" style="display: <?= $show_help ? 'block' : 'none' ?>; margin-top: 1rem; font-size: 0.9rem; line-height: 1.6;" class="text-white text-start">
+      <strong><?= $translations['about_title'] ?></strong><br>
+      <p><?= nl2br($translations['about_text']) ?></p>
+    </div>
+
   </div>
   </div>
   <script>
@@ -156,6 +171,23 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
       });
     <?php endif; ?>
   </script>
+  <script>
+  function toggleAbout() {
+    const aboutInfo = document.getElementById('aboutInfo');
+    const helpInfo = document.getElementById('helpInfo');
+    const wasHidden = aboutInfo.style.display === 'none';
+    
+    // Hide help info if shown
+    helpInfo.style.display = 'none';
+    aboutInfo.style.display = wasHidden ? 'block' : 'none';
+
+    if (wasHidden) {
+      aboutInfo.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+</script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

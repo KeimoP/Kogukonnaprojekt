@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_lang'])) {
 
 // Redirect if language not set
 if (empty($_SESSION['lang'])) {
-    header('Location: index.php');
+    header('Location: ./');
     exit;
 }
 
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['new_questions'])) {
     shuffle($questions);
     $_SESSION['current_questions'] = array_slice($questions, 0, 10);
     $_SESSION['questions_id'] = uniqid();
-    header("Location: ".$_SERVER['PHP_SELF']); // Refresh page after POST to avoid resubmission
+    header("Location: " . $_SERVER['PHP_SELF']); // Refresh page after POST to avoid resubmission
     exit;
 }
 
@@ -55,6 +55,7 @@ $selected_questions = $_SESSION['current_questions'];
 
 <!DOCTYPE html>
 <html lang="<?= $_SESSION['lang'] ?>">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,10 +68,11 @@ $selected_questions = $_SESSION['current_questions'];
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/questions.css" !important>
 </head>
+
 <body class="flower-bg">
     <nav class="navbar navbar-expand-lg navbar-light shadow-sm mb-4">
         <div class="container-fluid">
-            <a class="navbar-brand text-pink" href="index.php">🌸 <?= $translations['back_home'] ?? 'Back to Start' ?></a>
+            <a class="navbar-brand text-pink" href="./">🌸 <?= $translations['back_home'] ?? 'Back to Start' ?></a>
             <form method="POST" class="d-flex ms-auto align-items-center">
                 <input type="hidden" name="change_lang" value="1">
                 <select name="lang" class="form-select me-2" onchange="this.form.submit()">
@@ -84,13 +86,19 @@ $selected_questions = $_SESSION['current_questions'];
 
     <div class="container py-5">
         <div class="questions-card p-4">
-            <h1 class="text-center mb-4 text-pink"><?= $translations['questions_heading'] ?> <span class="flower-emoji"></span></h1>
-            
+            <h1 class="text-center mb-4 text-pink">
+                <span id="typing-heading"><?= $translations['questions_heading'] ?></span> <span
+                    class="flower-emoji"></span>
+            </h1>
+
+
             <form id="questions-form text-white">
                 <?php foreach ($selected_questions as $index => $question): ?>
                     <div class="question-card text-white">
-                    <label class="form-label fw-bold">🌷 <?= ($index+1) ?>. <?= $question[$_SESSION['lang']] ?></label>
-                        <textarea class="form-control text-white" name="answer[<?= $question['id'] ?>]" rows="3" placeholder="<?= $translations['answer_placeholder'] ?>"></textarea>
+                        <label class="form-label fw-bold">🌷 <?= ($index + 1) ?>.
+                            <?= $question[$_SESSION['lang']] ?></label>
+                        <textarea class="form-control text-white" name="answer[<?= $question['id'] ?>]" rows="3"
+                            placeholder="<?= $translations['answer_placeholder'] ?>"></textarea>
                     </div>
                 <?php endforeach; ?>
             </form>
@@ -106,5 +114,19 @@ $selected_questions = $_SESSION['current_questions'];
     </div>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const text = document.getElementById('typing-heading').innerText;
+        let i = 0;
+        document.getElementById('typing-heading').innerText = '';
+        function type() {
+            if (i < text.length) {
+                document.getElementById('typing-heading').innerText += text.charAt(i);
+                i++;
+                setTimeout(type, 50);
+            }
+        }
+        type();
+    </script>
 </body>
+
 </html>

@@ -1,14 +1,11 @@
 /* questions.css - Dynamic Color-Shifting Version */
 :root {
-    --primary-hue: 260;
-    --primary-color: hsl(var(--primary-hue), 100%, 65%);
-    --secondary-color: hsl(calc(var(--primary-hue) + 60), 100%, 65%);
-    --bg-color: hsl(var(--primary-hue), 40%, 10%);
-    --text-color: #ffffff;
-    --glass-color: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  }
+  --primary-hue: 220;
+  --primary-color: hsl(var(--primary-hue), 60%, 60%);
+  --secondary-color: hsl(calc(var(--primary-hue) + 30), 60%, 60%);
+  --bg-color: hsl(var(--primary-hue), 30%, 12%);
+  --text-color: #f5f5f5;
+}
   
   body {
     background: linear-gradient(135deg, var(--bg-color), hsl(var(--primary-hue), 40%, 20%));
@@ -146,7 +143,7 @@
   }
   
   .form-control {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(246, 243, 255, 0.3);
     border: 1px solid var(--glass-border);
     color: white;
     border-radius: 10px;

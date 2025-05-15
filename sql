@@ -1,0 +1,17 @@
+CREATE DATABASE IF NOT EXISTS kasutajad
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+USE kasutajad;
+
+CREATE TABLE IF NOT EXISTS device_tracker (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    device_identifier VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE USER 'kasutaja'@'localhost' IDENTIFIED BY 'Gd7HhvSX7HUEBCEkjFDy';
+
+GRANT ALL PRIVILEGES ON kasutajad.* TO 'kasutaja'@'localhost';
+
+FLUSH PRIVILEGES;
