@@ -114,6 +114,18 @@ $selected_questions = $_SESSION['current_questions'];
     </div>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        const confettiBtn = document.querySelector('button[name="new_questions"]');
+        confettiBtn.addEventListener('click', () => {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        });
+    </script>
+
     <script>
         const text = document.getElementById('typing-heading').innerText;
         let i = 0;
