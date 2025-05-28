@@ -205,20 +205,6 @@ $aiSuggestion = $emotionSuggestions[$userEmotion][$_SESSION['lang']] ?? $emotion
             });
         });
     </script>
-
-    <script>
-        const text = document.getElementById('typing-heading').innerText;
-        let i = 0;
-        document.getElementById('typing-heading').innerText = '';
-        function type() {
-            if (i < text.length) {
-                document.getElementById('typing-heading').innerText += text.charAt(i);
-                i++;
-                setTimeout(type, 50);
-            }
-        }
-        type();
-    </script>
     <script>
 // Enhanced slider functionality with animations
 const slides = document.querySelectorAll('.question-slide');
