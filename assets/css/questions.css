@@ -355,6 +355,26 @@ textarea.form-control {
 
 /* Responsive tweaks */
 @media (max-width: 768px) {
+  body,
+  html {
+    padding: 0;
+    margin: 0;
+  }
+
+  .container,
+  .container-fluid,
+  form,
+  #myForm {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .form-section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin: 0 !important;
+  }
   body {
     padding-top: 100px;
   }
