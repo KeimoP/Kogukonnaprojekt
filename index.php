@@ -51,6 +51,13 @@ if (!$lang && isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
   }
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $_SESSION['mood'] = $_POST['emotion'];
+    $_SESSION['name'] = $_POST['name'];
+    header('Location: questions.php');
+    exit;
+}
+
 // Default to Estonian
 if (!$lang || !array_key_exists($lang, $available_langs)) {
   $lang = 'et';
