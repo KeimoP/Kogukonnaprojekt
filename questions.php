@@ -146,7 +146,7 @@ $aiSuggestion = $emotionSuggestions[$userEmotion][$_SESSION['lang']] ?? $emotion
                         <div class="question-slide <?= $index === 0 ? 'active' : '' ?>">
                             <label class="form-label fw-bold">🌷 <?= ($index + 1) ?>.
                                 <?= $question[$_SESSION['lang']] ?></label>
-                            <textarea class="form-control text-white" name="answer[<?= $question['id'] ?>]" rows="5"
+                            <textarea autocapitalize="sentences" autocorrect="on" class="form-control text-white" name="answer[<?= $question['id'] ?>]" rows="5"
                                 placeholder="<?= $translations['answer_placeholder'] ?>"></textarea>
                         </div>
                     <?php endforeach; ?>

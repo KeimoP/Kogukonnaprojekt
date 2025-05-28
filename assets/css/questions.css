@@ -68,13 +68,11 @@ h1, h2, h3 {
 }
 
 .questions-card {
-  background: var(--glass-color);
   border-radius: 20px;
   padding: 2.5rem;
   box-shadow: var(--glass-shadow);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
   position: relative;
   overflow: hidden;
   animation: fadeInUp 0.8s ease forwards;
@@ -125,14 +123,14 @@ h1, h2, h3 {
   width: 100%;
 }
 textarea.form-control {
-  background: rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
   border: 1px solid var(--glass-border);
-  color: var(--text-color);
+  color: white;
   border-radius: 10px;
-  padding: 1rem;
+  padding: 0.75rem;
   transition: all 0.3s ease;
   width: 100%;
-  min-height: 150px; /* add this */
+  min-height: 120px; /* add this */
   resize: vertical;   /* allow user to resize if needed */
 }
 
@@ -196,13 +194,14 @@ textarea.form-control {
   position: absolute;
   display: none !important;
   width: 100%;
-  padding: 20px;
+  padding: 1rem;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transform-style: preserve-3d;
   backface-visibility: hidden;
+  box-sizing: border-box;
 }
 
 .question-slide.active {
@@ -356,6 +355,10 @@ textarea.form-control {
 
 /* Responsive tweaks */
 @media (max-width: 768px) {
+  body {
+    padding-top: 100px;
+  }
+
   .container {
     padding: 1rem;
   }
@@ -364,12 +367,48 @@ textarea.form-control {
     padding: 1.5rem;
   }
 
+  .slider-container {
+    padding: 0.5rem;
+  }
+
+  .question-slide {
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+
+  textarea.form-control {
+    font-size: 1rem;
+    min-height: 120px;
+    padding: 0.75rem;
+  }
+
+  .progress-container {
+    height: 8px;
+  }
+
+  .ai-suggestion-text {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .ai-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .btn-slide {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+
   .action-buttons {
-    flex-direction: column;
+    flex-direction: row !important;
+    justify-content: center;
     gap: 1rem;
   }
 
   .btn {
-    width: 100%;
+    width: auto;
   }
 }
