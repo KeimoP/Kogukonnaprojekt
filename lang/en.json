@@ -41,5 +41,8 @@
     "about_text": "This website was created in response to the growing number of people struggling with long-term sadness and inner dissatisfaction. Our goal is to provide a simple and safe environment where people can connect with themselves daily, express their feelings, and practice emotional awareness. Even a small moment of self-reflection each day can bring more clarity, peace, and strength to one's inner world.\n\nThe idea was born out of a shared desire to encourage emotional awareness and provide subtle, supportive tools to help users check in with themselves daily.\n\nTeam:\n👩‍💻 Keimo – Front-end, user experience design, and project management\n👨‍💻 Jõrn – Distributing posters and finding users\n🎨 Alar – Visual design of posters\n🧠 Karl – Gathering relevant questions from psychologists\n🎨 Gabriel – Poster design and layout\n\nWe hope this small tool brings a little peace into your day. 🌸",
     "ai_suggestion_title": "Personalized Suggestion",
     "submit_answers_button": "Submit Answers",
-    "try_again_button": "Try Again"
+    "try_again_button": "Try Again",
+    "previous_button": "Previous",
+    "next_button": "Next",
+    "new_questions_button": "New Questions"
 }

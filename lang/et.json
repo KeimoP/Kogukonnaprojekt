@@ -37,5 +37,13 @@
     "good_idea": "Hea mõte",
     "about_button": "Veebilehest",
     "about_title": "Projekti taust",
-    "about_text": "See veebileht loodi, sest pikaajalise kurvameelsuse ja sisemise rahulolematuse all kannatavate inimeste hulk on viimastel aastatel märgatavalt kasvanud. Meie eesmärk on pakkuda lihtsat ja turvalist keskkonda, kus inimesed saavad igapäevaselt endaga ühendust võtta, väljendada oma tundeid ning harjutada emotsionaalset teadlikkust. Isegi väike hetk päevas, mis on pühendatud enesejälgimisele, võib aidata luua rohkem selgust, rahu ja tuge sisemises maailmas.\n\nTegijad:\n👩‍💻 Keimo – Frontendi, kasutajakogemuse disain ja projekti juhtimine\n👨‍💻 Jõrn – Plakatite jagamine ja kasutajate leidmine\n🎨 Alar – Plakatite visuaalne disain\n🧠 Karl – Psühholoogide abil asjakohaste küsimuste koostamine\n🎨 Gabriel – Plakatite disain ja kujundus\n\nLoodame, et see tööriist toob sinu päeva natuke rohkem rahu. 🌸"
+    "about_text": "See veebileht loodi, sest pikaajalise kurvameelsuse ja sisemise rahulolematuse all kannatavate inimeste hulk on viimastel aastatel märgatavalt kasvanud. Meie eesmärk on pakkuda lihtsat ja turvalist keskkonda, kus inimesed saavad igapäevaselt endaga ühendust võtta, väljendada oma tundeid ning harjutada emotsionaalset teadlikkust. Isegi väike hetk päevas, mis on pühendatud enesejälgimisele, võib aidata luua rohkem selgust, rahu ja tuge sisemises maailmas.\n\nTegijad:\n👩‍💻 Keimo – Frontendi, kasutajakogemuse disain ja projekti juhtimine\n👨‍💻 Jõrn – Plakatite jagamine ja kasutajate leidmine\n🎨 Alar – Plakatite visuaalne disain\n🧠 Karl – Psühholoogide abil asjakohaste küsimuste koostamine\n🎨 Gabriel – Plakatite disain ja kujundus\n\nLoodame, et see tööriist toob sinu päeva natuke rohkem rahu. 🌸",
+    "previous_button": "Eelmine",
+    "next_button": "Järgmine",
+    "new_questions_button": "Uued küsimused",
+    "bubble_pop_title": "Mullimäng",
+    "bubble_pop_play": "Mängi Mullimängu!",
+    "bubble_pop_done": "Tubli töö! 🎉",
+    "bubble_pop_your_score": "Sinu skoor:",
+    "bubble_pop_play_again": "Mängi uuesti"
 }

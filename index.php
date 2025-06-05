@@ -52,10 +52,10 @@ if (!$lang && isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['mood'] = $_POST['emotion'];
-    $_SESSION['name'] = $_POST['name'];
-    header('Location: questions.php');
-    exit;
+  $_SESSION['mood'] = $_POST['emotion'];
+  $_SESSION['name'] = $_POST['name'];
+  header('Location: ./questions');
+  exit;
 }
 
 // Default to Estonian
@@ -78,14 +78,13 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><?= $translations['welcome_title'] ?></title>
   <link rel="icon" href="assets/images/logo.png">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/index.css" !important />
 </head>
 
-<body>
+<body class="floating-accent">
   <div class="glass-card">
-    <h1><?= $translations['welcome_heading'] ?></h1>
+    <h1 class="gradient-text h1.gradient-text"><?= $translations['welcome_heading'] ?></h1>
 
     <div class="lang-select">
       <?php foreach ($available_langs as $code => $name): ?>
@@ -95,13 +94,13 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
       <?php endforeach; ?>
     </div>
 
-    <form method="POST" action="questions.php">
-      <div class="form-floating text-dark">
+    <form method="POST" action="./questions">
+      <div class="custom-field form-floating text-dark">
         <input type="text" class="form-control" id="name" name="name" placeholder="<?= $translations['name_prompt'] ?>"
           required>
-        <label for="name"><?= $translations['name_prompt'] ?></label>
+        <span class="highlight"></span>
       </div>
-      <div class="mb-3">
+      <div class="mb-3 mt-2">
         <label class="form-label d-block text-white fw-semibold" style="font-size: 1.1rem;">
           <?= $translations['emotion_prompt'] ?? 'How are you feeling today?' ?>
         </label>
@@ -119,82 +118,84 @@ $translations = json_decode(file_get_contents("lang/{$lang}.json"), true);
           <label for="very_sad" title="<?= $translations['emotion_very_sad'] ?? 'Very Sad' ?>">😢</label>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary"><?= $translations['continue_button'] ?></button>
+      <button type="submit" class="custom-btn btn-primary"><?= $translations['continue_button'] ?></button>
     </form>
 
     <div class="text-center mt-3">
-      <form method="POST" action="questions.php">
+      <form method="POST" action="./questions">
         <input type="hidden" name="returning_user" value="1" />
-        <button type="submit" class="btn btn-link text-light"><?= $translations['returning_user'] ?></button>
+        <button type="submit" class="custom-btn btn-link text-light"><?= $translations['returning_user'] ?></button>
       </form>
     </div>
 
-    <div class="privacy-text rounded-2 p-4">
+    <div class="privacy-text rounded-2 mb-3">
       <?= $translations['privacy_notice'] ?>
     </div>
-    <div class="text-center mt-4">
-      <button class="btn btn-outline-light" onclick="toggleHelp()">
+    <div class="text-center">
+      <button class="custom-btn btn-outline-light" onclick="toggleHelp()">
         <?= $translations['help_button'] ?>
       </button>
 
-    <div id="helpInfo"
-      style="display: <?= $show_help ? 'block' : 'none' ?>; margin-top: 1rem; font-size: 0.9rem; line-height: 1.6;">
-      <strong><?= $translations['help_title'] ?></strong><br>
-      <ul style="list-style: none; padding: 0;">
-        <li>📞 <?= $translations['help_estonia'] ?></li>
-        <li>🌐 <a href="https://findahelpline.com" target="_blank"
-            style="color: #fff; text-decoration: underline;"><?= $translations['help_global'] ?></a></li>
-        <li>🌐 <a href="https://www.peaasi.ee" style="color: #fff; text-decoration: underline;"
-            target="_blank"><?= $translations['help_eesti'] ?></a></li>
-        <li>🌐 <a href="https://www.eluliin.ee" style="color: #fff; text-decoration: underline;"
-            target="_blank"><?= $translations['help_kriis'] ?></a></li>
-        <li>🧠 <?= $translations['help_local'] ?></li>
-      </ul>
-    </div>
-    <button class="btn btn-outline-light ms-2" onclick="toggleAbout()">
+      <div id="helpInfo">
+        <strong><?= $translations['help_title'] ?></strong><br>
+        <ul style="list-style: none; padding: 0;">
+          <li>📞 <?= $translations['help_estonia'] ?></li>
+          <li>🌐 <a href="https://findahelpline.com" target="_blank"
+              style="color: #fff; text-decoration: underline;"><?= $translations['help_global'] ?></a></li>
+          <li>🌐 <a href="https://www.peaasi.ee" style="color: #fff; text-decoration: underline;"
+              target="_blank"><?= $translations['help_eesti'] ?></a></li>
+          <li>🌐 <a href="https://www.eluliin.ee" style="color: #fff; text-decoration: underline;"
+              target="_blank"><?= $translations['help_kriis'] ?></a></li>
+          <li>🧠 <?= $translations['help_local'] ?></li>
+        </ul>
+      </div>
+      <button class="custom-btn btn-outline-light" onclick="toggleAbout()">
         <?= $translations['about_button'] ?>
       </button>
-    <div id="aboutInfo" style="display: <?= $show_help ? 'block' : 'none' ?>; margin-top: 1rem; font-size: 0.9rem; line-height: 1.6;" class="text-white text-start">
-      <strong><?= $translations['about_title'] ?></strong><br>
-      <p><?= nl2br($translations['about_text']) ?></p>
+      <div id="aboutInfo" class="text-white text-start">
+        <strong><?= $translations['about_title'] ?></strong><br>
+        <p><?= nl2br($translations['about_text']) ?></p>
+      </div>
+      <button class="custom-btn btn-outline-light" onclick="window.location='./games/bubble-pop.php'">
+        🎈 <?= $translations['bubble_pop_play'] ?? 'Play Bubble Pop!' ?>
+      </button>
     </div>
-
-  </div>
   </div>
   <script>
     function toggleHelp() {
       const helpInfo = document.getElementById('helpInfo');
-      const wasHidden = helpInfo.style.display === 'none';
-      helpInfo.style.display = wasHidden ? 'block' : 'none';
-      if (wasHidden) {
-        helpInfo.scrollIntoView({ behavior: 'smooth' });
+      const aboutInfo = document.getElementById('aboutInfo');
+      const isOpen = helpInfo.classList.contains('show');
+      // Always close the other section
+      aboutInfo.classList.remove('show');
+      // Toggle this one
+      if (!isOpen) {
+        helpInfo.classList.add('show');
+        setTimeout(() => {
+          helpInfo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 350); // Wait for the expand animation (match your CSS transition)
+      } else {
+        helpInfo.classList.remove('show');
       }
     }
 
-    <?php if ($show_help): ?>
-      window.addEventListener('load', () => {
-        const helpInfo = document.getElementById('helpInfo');
-        if (helpInfo) helpInfo.scrollIntoView({ behavior: 'smooth' });
-      });
-    <?php endif; ?>
-  </script>
-  <script>
-  function toggleAbout() {
-    const aboutInfo = document.getElementById('aboutInfo');
-    const helpInfo = document.getElementById('helpInfo');
-    const wasHidden = aboutInfo.style.display === 'none';
-    
-    // Hide help info if shown
-    helpInfo.style.display = 'none';
-    aboutInfo.style.display = wasHidden ? 'block' : 'none';
-
-    if (wasHidden) {
-      aboutInfo.scrollIntoView({ behavior: 'smooth' });
+    function toggleAbout() {
+      const aboutInfo = document.getElementById('aboutInfo');
+      const helpInfo = document.getElementById('helpInfo');
+      const isOpen = aboutInfo.classList.contains('show');
+      // Always close the other section
+      helpInfo.classList.remove('show');
+      // Toggle this one
+      if (!isOpen) {
+        aboutInfo.classList.add('show');
+        setTimeout(() => {
+          aboutInfo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 350); // Wait for the expand animation
+      } else {
+        aboutInfo.classList.remove('show');
+      }
     }
-  }
-</script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </script>
 </body>
 
 </html>
